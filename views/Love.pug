@@ -1,0 +1,13 @@
+extends ./mixins/layout.pug
+block content
+  form.container(action="/love", method="post")
+    p.title #{name}님 함께 하고 싶은 사람 이름을 적어주세요
+    p
+      input.input_box(type="hidden", name="name", value=name)
+      input.input_box(type="text", name="first", placeholder="1순위")
+      input.input_box(type="text", name="second", placeholder="2순위")
+      input.input_box(type="text", name="third", placeholder="3순위")
+    p.submit_container
+      button.input_box.submit(type="submit") 입력
+      
+  

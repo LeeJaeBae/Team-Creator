@@ -1,20 +1,10 @@
 extends ./mixins/layout.pug
 block content
-  form(action="/", method="post")
+  form.container(action="/", method="post")
+    p.title 이름을 입력해주세요
     p
-      input(type="text", name="name", placeholder="name")
-    p
-      input(type="text", name="first", placeholder="first")
-    p
-      input(type="text", name="second", placeholder="second")
-    p
-      input(type="text", name="third", placeholder="third")
-    p
-      button(type="submit") test
-
-  h1= groups[1]
-
-  each val, index in groups[0] 
-    p= `==============`+val.point+`==============`
-    each std in val.student
-      p= index +':'+ std.name
+      input.input_box(type="text", name="name", placeholder="이름")
+    p.submit_container
+      button.input_box.submit(type="submit") 입력
+      
+  

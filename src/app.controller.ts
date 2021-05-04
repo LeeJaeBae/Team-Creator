@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
+  Query,
   Redirect,
   Render,
   Res,
@@ -15,68 +17,68 @@ import { Student } from './student';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {
-    AppController.data.push(
-      new Student({
-        name: `이재원`,
-        first: `조승현`,
-        second: `이구슬`,
-        third: `김희수`,
-      }),
-      new Student({
-        name: `조승현`,
-        first: `이재원`,
-        second: `정재순`,
-        third: `김희수`,
-      }),
-      new Student({
-        name: `이구슬`,
-        first: `이승형`,
-        second: `이재원`,
-        third: `정예준`,
-      }),
-      new Student({
-        name: `김희수`,
-        first: `이재원`,
-        second: `조승현`,
-        third: `김재경`,
-      }),
-      new Student({
-        name: `김재경`,
-        first: `김한얼`,
-        second: `정재순`,
-        third: `변희주`,
-      }),
-      new Student({
-        name: `김한얼`,
-        first: `조승현`,
-        second: `이승형`,
-        third: `황용주`,
-      }),
-      new Student({
-        name: `황용주`,
-        first: `조승현`,
-        second: `이구슬`,
-        third: `이재원`,
-      }),
-      new Student({
-        name: `정재순`,
-        first: `김한얼`,
-        second: `이승형`,
-        third: `김희수`,
-      }),
-      new Student({
-        name: `이승형`,
-        first: `조승현`,
-        second: `이구슬`,
-        third: `김한얼`,
-      }),
-      new Student({
-        name: `정예준`,
-        first: `조승현`,
-        second: `이구슬`,
-        third: `김희수`,
-      }),
-    );
+    // AppController.data.push(
+    //   new Student({
+    //     name: `이재원`,
+    //     first: `조승현`,
+    //     second: `이구슬`,
+    //     third: `김희수`,
+    //   }),
+    //   new Student({
+    //     name: `조승현`,
+    //     first: `이재원`,
+    //     second: `정재순`,
+    //     third: `김희수`,
+    //   }),
+    //   new Student({
+    //     name: `이구슬`,
+    //     first: `이승형`,
+    //     second: `이재원`,
+    //     third: `정예준`,
+    //   }),
+    //   new Student({
+    //     name: `김희수`,
+    //     first: `이재원`,
+    //     second: `조승현`,
+    //     third: `김재경`,
+    //   }),
+    //   new Student({
+    //     name: `김재경`,
+    //     first: `김한얼`,
+    //     second: `정재순`,
+    //     third: `변희주`,
+    //   }),
+    //   new Student({
+    //     name: `김한얼`,
+    //     first: `조승현`,
+    //     second: `이승형`,
+    //     third: `황용주`,
+    //   }),
+    //   new Student({
+    //     name: `황용주`,
+    //     first: `조승현`,
+    //     second: `이구슬`,
+    //     third: `이재원`,
+    //   }),
+    //   new Student({
+    //     name: `정재순`,
+    //     first: `김한얼`,
+    //     second: `이승형`,
+    //     third: `김희수`,
+    //   }),
+    //   new Student({
+    //     name: `이승형`,
+    //     first: `조승현`,
+    //     second: `이구슬`,
+    //     third: `김한얼`,
+    //   }),
+    //   new Student({
+    //     name: `정예준`,
+    //     first: `조승현`,
+    //     second: `이구슬`,
+    //     third: `김희수`,
+    //   }),
+    // );
   }
 
   static data: Student[] = [];
@@ -87,32 +89,68 @@ export class AppController {
   @Get()
   @Render('Home')
   getHome() {
-    return {
-      data: AppController.data,
-      groups: AppController.groups.length > 0 ? AppController.groups : [[], 0],
-      history: AppController.history,
-    };
+    return this.appService.getAllStudent();
   }
 
   @Post('/')
-  @Render('Home')
-  insertStudent(@Body() data: Student) {
-    let key: boolean;
-    key = true;
-    Object.keys(data).map((v) => {
-      if (data[v] === '') {
-        key = false;
-      }
+  async insertStudent(@Body() data: Student, @Res() res) {
+    if (data.name === '') {
+      res.redirect('/');
+      return;
+    }
+    await this.appService.createStudent(data.name).then((v) => {
+      res.redirect('/love?name=' + data.name);
     });
-    if (key) AppController.data.push(new Student({ ...data }));
-    return { data: AppController.data };
+  }
+
+  @Get('/delete')
+  deleteStudent(@Query() data: Student, @Res() res) {
+    this.appService.deleteOne(data.name).then((v) => {
+      res.redirect('/');
+    });
+  }
+
+  @Get('/love')
+  @Render('Love')
+  getLove(@Query() data, @Res() res) {
+    if (this.appService.findOne(data.name)) {
+      const _data = this.appService.getAllStudent();
+      return { ..._data, name: data.name };
+    } else {
+      res.redirect('/');
+    }
+  }
+
+  @Post('/love')
+  postLove(@Body() data, @Res() res) {
+    this.appService.setLoveStd(data).then((v) => {
+      res.redirect('/hate?name=' + data.name);
+    });
+  }
+
+  @Get('/hate')
+  @Render('Hate')
+  getHate(@Query() data, @Res() res) {
+    if (this.appService.findOne(data.name)) {
+      const _data = this.appService.getAllStudent();
+      return { ..._data, name: data.name };
+    } else {
+      res.redirect('/');
+    }
+  }
+
+  @Post('/hate')
+  postHate(@Body() data, @Res() res) {
+    this.appService.setHateStd(data).then((v) => {
+      res.redirect('/');
+    });
   }
 
   @Get('/group')
   @Render('Group')
   getGroup() {
     return {
-      data: AppController.data,
+      data: [...this.appService.getAllStudent().data],
       count: AppController.groupCount,
       stdCount: AppController.data.length,
     };
@@ -133,12 +171,14 @@ export class AppController {
   async postCreate(@Res() res: Response) {
     await this.checkTarget()
       .then(() => {
-        this.createGroup();
+        this.createGroup().then((v) => {
+          res.redirect('/');
+        });
       })
       .catch((e) => {
+        res.redirect('/');
         console.log(e);
       });
-    res.redirect('/');
   }
 
   async checkTarget(): Promise<void> {
@@ -197,7 +237,10 @@ export class AppController {
       }
     }
     AppController.history.sort((a, b) => a[1] - b[1]);
-    AppController.groups = AppController.history.pop();
+    console.log(AppController.history);
+    AppController.groups =
+      // AppController.history[AppController.history.length - 1];
+      AppController.history[0];
   }
 
   @Redirect('/create', 200)

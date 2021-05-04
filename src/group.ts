@@ -24,8 +24,10 @@ export class Group {
   calcPoint() {
     this.student.map((v) => {
       this.stdIds.map((std) => {
-        if (v.stdList.includes(std)) {
+        if (v.loveList.includes(std)) {
           this.point++;
+        } else if (v.hateList.includes(std)) {
+          this.point--;
         }
       });
     });

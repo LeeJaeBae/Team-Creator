@@ -2,8 +2,18 @@
 html
   head
     title My Site - #{title}
+    link(rel='stylesheet', href='/style.css')
   body
-    a(href="http://localhost:3000") list
+    a(href="/") list
     span= "\t"
-    a(href="http://localhost:3000/group") group
-    block content
+    a(href="/group") group
+    div.content
+      block content
+      div.list_container
+        each val, index in data 
+          if val.done === false
+            form(action="/delete", method="delete")
+              input(type="hidden", name="name", value=val.name)
+              button.list(type="submit")= val.name
+          if val.done === true
+            input.list.done(type="button", value=val.name)
