@@ -1,0 +1,20 @@
+extends ./mixins/layout.pug
+block content
+  form(action="/", method="post")
+    p
+      input(type="text", name="name", placeholder="name")
+    p
+      input(type="text", name="first", placeholder="first")
+    p
+      input(type="text", name="second", placeholder="second")
+    p
+      input(type="text", name="third", placeholder="third")
+    p
+      button(type="submit") test
+
+  h1= groups[1]
+
+  each val, index in groups[0] 
+    p= `==============`+val.point+`==============`
+    each std in val.student
+      p= index +':'+ std.name

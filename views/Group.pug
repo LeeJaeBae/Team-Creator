@@ -1,0 +1,12 @@
+extends ./mixins/layout.pug
+block content
+  form(action="/group", method="post") 
+    input(type="number", name="count", placeholder="count")
+    button(type="submit") submit
+  h1 Count Of Groups : #{count}
+  h1 Count Of Students : #{stdCount}
+  span
+    each val, index in data
+      p= index+1 + '\t|\t' + val.name
+  form(action="/create", method="post")
+    button(type="submit") create
