@@ -1,7 +1,57 @@
-# NEST-NEXT AGGREGATED EXAMPLE
+# Team-Creator
 
-This example demonstrates how to use nest-next to add server side rendering to [nest](https://github.com/nestjs/nest) with [next.js](https://github.com/zeit/next.js/).
+---
 
-All needed components are expected to be under one project, one repo, with this folder being the root of the repo.
+Make the Team for Students
 
-> You need to build the project first
+<!-- 
+## Installation
+
+``` shell
+npm install --save react-router-header
+
+or
+
+yarn add react-router-header
+``` -->
+
+<!-- ## Development
+
+```
+npm install
+npm start
+```
+
+## Usage
+
+```js
+import Routes, {useRouter} from 'react-router-header';
+
+const Component = () => <></>;
+
+const router = useRouter(); -->
+<!-- 
+
+// /**
+//  * @param Component
+//  * @param path
+//  * @param name
+//  * @param exact
+//  */
+// router.add(Component, "/path", "name", true)
+
+// export default () => <Routes.Router/>;
+// ```
+ -->
+
+# Version History
+
+## 0.0.1
+
+The Prototype model
+
+
+## License
+
+Team-Creator is released under the MIT license.
+
