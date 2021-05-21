@@ -5,6 +5,7 @@ import { NextConfig } from 'next/dist/next-server/server/config-shared';
 import { AppController } from './app.controller';
 import { BlogController } from './blog/blog.controller';
 import { BlogService } from './blog/blog.service';
+import { StudentModule } from './student/student.module';
 
 @Module({
 	imports: [
@@ -12,10 +13,11 @@ import { BlogService } from './blog/blog.service';
 			Next({
 				dev: process.env.NODE_ENV !== 'production',
 				conf: ((): any => {
-					useFilesystemPublicRoutes: false;
+					return { useFilesystemPublicRoutes: false };
 				})(),
 			})
 		),
+		StudentModule,
 	],
 	controllers: [AppController, BlogController],
 	providers: [BlogService],
